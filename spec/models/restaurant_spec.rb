@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 describe Restaurant, type: :model do
   it { should have_many(:reviews).dependent(:destroy) }
 
@@ -14,4 +16,6 @@ describe Restaurant, type: :model do
   end
 
   it { should validate_length_of(:name).is_at_least(3) }
+
+  it { should validate_uniqueness_of(:name) }
 end
