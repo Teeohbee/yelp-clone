@@ -1,4 +1,6 @@
 class RestaurantsController < ApplicationController
+  include RestaurantsHelper
+  
   def index
     @restaurants = Restaurant.all
   end
@@ -31,9 +33,5 @@ class RestaurantsController < ApplicationController
     @restaurant.destroy
     flash[:notice] = 'Restaurant deleted successfully'
     redirect_to '/restaurants'
-  end
-
-  def restaurant_params
-    params.require(:restaurant).permit(:name)
   end
 end

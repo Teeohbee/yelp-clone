@@ -28,6 +28,17 @@ feature 'restaurants' do
       expect(page).to have_content 'KFC'
       expect(current_path).to eq '/restaurants'
     end
+    
+    context 'an invalid restaurant' do
+      it 'does not let you submit a name that is too short' do
+        visit '/restaurants'
+        click_link 'Add a restaurant'
+        fill_in 'Name', with: 'kf'
+        click_button 'Create Restaurant'
+        expect(page).not_to have_css 'h2', text: 'kf'
+        expect(page).to have_content 'error'
+      end
+    end
   end
 
   context 'viewing restaurants' do
@@ -62,6 +73,17 @@ feature 'restaurants' do
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
       expect(page).to have_content 'Restaurant deleted successfully'
+    end
+
+    scenario 'removes reviews with it' do
+      visit '/restaurants'
+      click_link 'Review KFC'
+      fill_in 'Thoughts', with: 'so so'
+      select '3', from: 'Rating'
+      click_button 'Leave Review'
+      expect(current_path).to eq '/restaurants'
+      click_link 'Delete KFC'
+      expect(page).not_to have_content('so so')
     end
   end
 end
