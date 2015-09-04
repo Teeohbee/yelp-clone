@@ -3,4 +3,11 @@ class Restaurant < ActiveRecord::Base
   belongs_to :user, required: true
   validates :name, length: { minimum: 3 }, uniqueness: true
   validates :user, presence: true
+
+  def build_review(attributes = {}, user)
+    review = reviews.build(attributes)
+    review.user = user
+    review
+  end
+
 end

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Review, type: :model do
   it { should belong_to(:restaurant) }
+  it { should belong_to (:user) }
 
   it { should validate_inclusion_of(:rating).in_range(1..5) }
 
