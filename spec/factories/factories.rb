@@ -4,4 +4,9 @@ FactoryGirl.define do
     password "testtest"
     password_confirmation "testtest"
   end
+
+  factory :restaurant do
+    name 'KFC'
+    user
+  end
 end

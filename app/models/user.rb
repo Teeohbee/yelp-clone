@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  has_many :restaurants, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -6,7 +7,8 @@ class User < ActiveRecord::Base
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email
+      name = auth.info.name.gsub(' ', '').downcase
+      user.email = "#{name}@facebook.com"
       user.password = Devise.friendly_token[0,20]
     end
   end
