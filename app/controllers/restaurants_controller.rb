@@ -1,7 +1,7 @@
 class RestaurantsController < ApplicationController
   include RestaurantsHelper
 
-  before_action :authenticate_user!, :except => [:index, :show]
+  before_action :authenticate_user!, except: [:index, :show]
 
   def index
     @restaurants = Restaurant.all
@@ -27,7 +27,7 @@ class RestaurantsController < ApplicationController
   def edit
     @restaurant = Restaurant.find(params[:id])
     if current_user.email != @restaurant.user.email
-      flash[:notice] = "Cannot edit"
+      flash[:notice] = 'Cannot edit'
       redirect_to restaurants_path
     end
   end

@@ -7,6 +7,12 @@ describe Restaurant, type: :model do
 
   it { should have_many(:reviews).dependent(:destroy) }
 
+  it { should validate_length_of(:name).is_at_least(3) }
+
+  it { should validate_uniqueness_of(:name) }
+
+  it { should validate_presence_of(:user) }
+
   it 'is not valid with a name of less than three characters' do
     restaurant = Restaurant.new(name: "kf")
     expect(restaurant).to have(1).error_on(:name)
@@ -20,9 +26,22 @@ describe Restaurant, type: :model do
     expect(restaurant).to have(1).error_on(:name)
   end
 
-  it { should validate_length_of(:name).is_at_least(3) }
+  describe '#average_rating' do
+    context 'no reviws' do
+      it 'returns "N/A" when there are no reviews' do
+        user = create :user
+        restaurant = user.restaurants.create(name: 'The Ivy')
+        expect(restaurant.average_rating).to eq 'N/A'
+      end
+    end
 
-  it { should validate_uniqueness_of(:name) }
-
-  it { should validate_presence_of(:user) }
+    context '1 review' do
+      it 'returns that rating' do
+        user = create :user
+        restaurant = user.restaurants.create(name: 'The Ivy')
+        restaurant.reviews.create(rating: 4)
+        expect(restaurant.average_rating).to eq 4
+      end
+    end
+  end
 end
